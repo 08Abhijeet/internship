@@ -1,0 +1,41 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@google-cloud/translate": "^9.3.0",
+    "@google/genai": "^1.31.0",
+    "@google/generative-ai": "^0.24.1",
+    "@sendgrid/mail": "^8.1.6",
+    "@vitalets/google-translate-api": "^9.2.1",
+    "@zegocloud/zego-uikit-prebuilt": "^2.17.2",
+    "axios": "^1.13.2",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.6.1",
+    "express": "^5.2.1",
+    "express-fileupload": "^1.5.1",
+    "fs": "^0.0.1-security",
+    "geoip-lite": "^1.4.10",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.0",
+    "multer": "^2.0.1",
+    "nodemailer": "^7.0.11",
+    "nodemon": "^3.1.10",
+    "openai": "^6.9.1",
+    "razorpay": "^2.9.6",
+    "stripe": "^20.0.0",
+    "twilio": "^5.11.1"
+  }
+}
