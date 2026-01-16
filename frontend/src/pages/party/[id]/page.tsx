@@ -10,7 +10,13 @@ const VideoConference = dynamic(() => import("@/components/VideoConference"), {
 });
 
 export default function PartyPage() {
-  const { id } = useParams();
+  const params = useParams();
+
+  if (!params || !params.id) {
+    return null; // or loading
+  }
+
+  const { id } = params;
 
   return (
     <div className="flex flex-col h-screen bg-black">
