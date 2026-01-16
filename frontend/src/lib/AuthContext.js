@@ -48,30 +48,11 @@ export const UserProvider = ({ children }) => {
     return southStates.some((s) => region?.toLowerCase().includes(s.toLowerCase()));
   };
 
-  const applyDynamicTheme = (region) => {
-    const now = new Date();
-    const currentHour = now.getHours(); 
-
-    const isTimeMatch = currentHour >= 10 && currentHour < 12;
-
-    const isLocationMatch = isSouthIndianState(region);
-
-    const htmlRoot = document.documentElement;
-
-    if (isTimeMatch && isLocationMatch) {
-        htmlRoot.classList.remove("dark"); 
-    } else {
-        htmlRoot.classList.add("dark"); 
-    }
-  };
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseuser) => {
       if (!firebaseuser) {
         setUser(null);
         localStorage.removeItem("user");
-        
-        document.documentElement.classList.add("dark");
         
         isLoginInProgress.current = false;
         return;
@@ -81,10 +62,6 @@ export const UserProvider = ({ children }) => {
       if (stored && !isLoginInProgress.current) {
          const parsedUser = JSON.parse(stored);
          setUser(parsedUser);
-         
-         if (parsedUser.userState) {
-             applyDynamicTheme(parsedUser.userState);
-         }
       }
 
       if (firebaseuser.email && !isLoginInProgress.current) {
@@ -96,10 +73,6 @@ export const UserProvider = ({ children }) => {
           if (res.data?.result) {
             setUser(res.data.result);
             localStorage.setItem("user", JSON.stringify(res.data.result));
-            
-            if (res.data.result.userState) {
-                applyDynamicTheme(res.data.result.userState);
-            }
           }
         } catch (error) {}
       }
@@ -117,8 +90,6 @@ export const UserProvider = ({ children }) => {
       const toastId = toast.loading("Detecting Location...");
       const region = await getUserRegion();
       
-      applyDynamicTheme(region);
-
       toast.dismiss(toastId);
       if (region !== "Unknown") {
           toast.success(`📍 Location Detected: ${region}`, { duration: 4000 });
@@ -199,10 +170,6 @@ export const UserProvider = ({ children }) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
     
-    if (userData.userState) {
-        applyDynamicTheme(userData.userState);
-    }
-
     setModalOpen(false);
     setTempAuthData(null);
   };
@@ -222,7 +189,6 @@ export const UserProvider = ({ children }) => {
     setModalOpen(false);
     setTempAuthData(null);
     await signOut(auth);
-    document.documentElement.classList.add("dark");
   };
 
   const logout = async () => {
@@ -230,7 +196,6 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem("user");
     await signOut(auth);
     setModalOpen(false);
-    document.documentElement.classList.add("dark");
   };
   
   const handlegooglesignin = async () => {
@@ -248,9 +213,6 @@ export const UserProvider = ({ children }) => {
     if (saved) {
         const pUser = JSON.parse(saved);
         setUser(pUser);
-        if(pUser.userState) applyDynamicTheme(pUser.userState);
-    } else {
-        document.documentElement.classList.add("dark");
     }
   }, []);
 
