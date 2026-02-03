@@ -138,25 +138,31 @@ export const editcomment = async (req, res) => {
 export const translateComment = async (req, res) => {
   const { text, targetLanguage } = req.body;
 
-  if (!text || !targetLanguage) {
-    return res.status(400).json({ message: "Text and target language required" });
-  }
-
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Debug 1: Check if API Key exists
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error("SERVER ERROR: GEMINI_API_KEY is missing in Render Environment Variables!");
+    }
 
-    const prompt = `You are a translator. Translate the following text into ${targetLanguage}. 
-    Do not add explanations. Do not put the text in quotes. Return ONLY the translated text.
-    
-    Text: "${text}"`;
+    // Debug 2: Ensure correct model
+    // Make sure this is "gemini-1.5-flash"
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+    const prompt = `Translate to ${targetLanguage}: "${text}"`;
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const translatedText = response.text();
 
-    return res.status(200).json({ translatedText });
+    res.status(200).json({ translatedText });
+
   } catch (error) {
-    console.error("Translation error:", error);
-    return res.status(500).json({ message: "Translation failed" });
+    console.error("Translation Failed:", error);
+    
+    // SEND THE REAL ERROR TO THE FRONTEND
+    res.status(500).json({ 
+      message: "Translation Failed", 
+      error_details: error.message, // <--- This will tell us the reason
+      model_used: "gemini-1.5-flash"
+    });
   }
 };
