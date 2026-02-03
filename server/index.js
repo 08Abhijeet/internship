@@ -40,7 +40,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
 });
-console.log("OpenAI API Key →", process.env.GEMINI_API_KEY);
+console.log("GEMINI API Key →", process.env.GEMINI_API_KEY);
 
 const DBURL = process.env.DB_URL;
 mongoose
