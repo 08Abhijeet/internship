@@ -35,6 +35,14 @@ app.use("/api", translateRoutes);
 app.use("/downloads", downloadRoutes);
 app.use("/feedback", likeDislikeRoutes);
 app.use("/payment", paymentRoutes);
+
+// Add Cross-Origin-Opener-Policy header to all responses
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  next();
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
